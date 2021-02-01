@@ -1,6 +1,9 @@
 package com.palaspro.pokechallenge.feature.main.viewmodel
 
-import androidx.lifecycle.ViewModel
+import com.palaspro.pokechallenge.base.BaseViewModel
+import com.palaspro.pokechallenge.feature.main.navigator.MainNavigator
 
-class MainViewModel : ViewModel() {
+class MainViewModel(
+        private var navigator: MainNavigator
+) : BaseViewModel() {
 }

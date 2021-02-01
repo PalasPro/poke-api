@@ -1,4 +1,4 @@
 package com.palaspro.pokechallenge.base
 
-class PokeViewModel {
+abstract class BaseNavigator {
 }

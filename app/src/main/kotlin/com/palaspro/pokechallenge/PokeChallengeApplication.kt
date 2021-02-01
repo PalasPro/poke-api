@@ -1,7 +1,9 @@
 package com.palaspro.pokechallenge
 
 import android.app.Application
-import com.palaspro.pokechallenge.di.modulesPokeChallenge
+import com.palaspro.pokechallenge.di.modulesDataSource
+import com.palaspro.pokechallenge.di.modulesDomain
+import com.palaspro.pokechallenge.di.modulesPresentation
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -14,7 +16,10 @@ class PokeChallengeApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@PokeChallengeApplication)
-            modules(modulesPokeChallenge)
+            modules(listOf(
+                    modulesDomain,
+                    modulesDataSource,
+                    modulesPresentation))
         }
     }
 }

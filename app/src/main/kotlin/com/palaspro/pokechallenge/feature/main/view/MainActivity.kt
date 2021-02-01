@@ -5,11 +5,15 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.palaspro.pokechallenge.R
+import com.palaspro.pokechallenge.base.BaseActivity
 import com.palaspro.pokechallenge.databinding.ActivityMainBinding
+import com.palaspro.pokechallenge.feature.main.viewmodel.MainViewModel
+import org.koin.android.scope.ScopeActivity
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
-
+    private val viewmodelMain : MainViewModel by viewModel()
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
