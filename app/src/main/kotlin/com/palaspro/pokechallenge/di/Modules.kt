@@ -8,12 +8,12 @@ import com.palaspro.pokechallenge.datasource.remote.CLIENT_POKEMON_TAG
 import com.palaspro.pokechallenge.datasource.remote.PokemonClient
 import com.palaspro.pokechallenge.datasource.room.PokemonDatabase
 import com.palaspro.pokechallenge.datasource.room.dao.DAO_POKEMON_TAG
-import com.palaspro.pokechallenge.presenter.feature.detail.navigator.DetailNavigator
-import com.palaspro.pokechallenge.presenter.feature.detail.view.DetailActivity
-import com.palaspro.pokechallenge.presenter.feature.detail.viewmodel.DetailViewModel
-import com.palaspro.pokechallenge.presenter.feature.main.navigator.MainNavigator
-import com.palaspro.pokechallenge.presenter.feature.main.view.activity.MainActivity
-import com.palaspro.pokechallenge.presenter.feature.main.viewmodel.MainViewModel
+import com.palaspro.pokechallenge.presenter.features.detail.navigator.DetailNavigator
+import com.palaspro.pokechallenge.presenter.features.detail.view.activity.DetailActivity
+import com.palaspro.pokechallenge.presenter.features.detail.viewmodel.DetailViewModel
+import com.palaspro.pokechallenge.presenter.features.main.navigator.MainNavigator
+import com.palaspro.pokechallenge.presenter.features.main.view.activity.MainActivity
+import com.palaspro.pokechallenge.presenter.features.main.viewmodel.MainViewModel
 import me.sargunvohra.lib.pokekotlin.client.PokeApiClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
@@ -28,7 +28,7 @@ val modulesPresentation = module(override = true) {
     }
     scope<DetailActivity> {
         scoped { DetailNavigator(get())}
-        viewModel { DetailViewModel(get()) }
+        viewModel { (idPokemon : Int) -> DetailViewModel(idPokemon ,get(), get(named(REPOSITORY_POKEMON_TAG))) }
     }
 }
 
