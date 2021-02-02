@@ -47,6 +47,8 @@ dependencies {
     // Androidx compat
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation "androidx.constraintlayout:constraintlayout:2.0.4"
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     // UI material
     implementation 'com.google.android.material:material:1.2.1'
@@ -54,6 +56,8 @@ dependencies {
     // poke api wrapper from documentation
     implementation 'me.sargunvohra.lib:pokekotlin:2.3.1'
 
+    // Image load library
+    implementation 'io.coil-kt:coil:1.1.1'
 
     // life cycle
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"

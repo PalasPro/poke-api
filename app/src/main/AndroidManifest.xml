@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.palaspro.pokechallenge">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".PokeChallengeApplication"
         android:allowBackup="false"
@@ -13,7 +15,7 @@
         android:theme="@style/Theme.Pokeapi"
         tools:ignore="AllowBackup">
         <activity
-            android:name=".feature.main.view.MainActivity"
+            android:name="com.palaspro.pokechallenge.presenter.feature.main.view.activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Pokeapi.NoActionBar">
             <intent-filter>
@@ -22,7 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".feature.detail.view.DetailActivity"/>
+        <activity android:name="com.palaspro.pokechallenge.presenter.feature.detail.view.DetailActivity"/>
     </application>
 
 </manifest>
