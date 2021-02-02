@@ -3,11 +3,14 @@ package com.palaspro.pokechallenge.domain.repository
 import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.right
+import com.palaspro.pokechallenge.datasource.model.PokemonEntity
 import com.palaspro.pokechallenge.datasource.model.toPokemonEntity
 import com.palaspro.pokechallenge.datasource.remote.PokemonClient
 import com.palaspro.pokechallenge.datasource.room.dao.PokemonDao
 import com.palaspro.pokechallenge.domain.model.toPokemonEntity
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import me.sargunvohra.lib.pokekotlin.model.Pokemon
 
 const val REPOSITORY_POKEMON_TAG = "pokemonRepository"
@@ -20,27 +23,30 @@ class PokemonRepository(
 
     fun getPokemonDetailFlow(id: Int) = pokemonDao.pokemonDetailFlow(id)
 
-    suspend fun loadPokemonPage(page: Int): Either<Error, Int> {
+    suspend fun loadPokemonPage(page: Int, forceRefresh : Boolean = false): Either<Error, Int> {
         return pokemonClient.getPokemonList(page).flatMap { namedApiResourceList ->
-            val result = namedApiResourceList.results.map { resource ->
-                val entity = resource.toPokemonEntity()
-                pokemonDao.getPokemon(entity.id)?.let { oldEntity ->
-                    if (oldEntity.urlImage == null) {
-                        pokemonClient.getPokemonDetail(entity.id).map { pokemon ->
-                            entity.urlImage = pokemon.sprites.frontDefault
+            val result = arrayListOf<PokemonEntity>()
+            namedApiResourceList.results.asFlow().map { resource ->
+                var entity = resource.toPokemonEntity()
+                pokemonDao.getPokemon(resource.id)?.let { oldEntity ->
+                    oldEntity.urlImage?.let {
+                        entity = oldEntity
+                    } ?: run {
+                        pokemonClient.getPokemonDetail(resource.id).map { pokemon ->
+                            entity = pokemon.toPokemonEntity()
                         }
-                    } else {
-                        entity.urlImage = oldEntity.urlImage
                     }
                 } ?: run {
-                    pokemonClient.getPokemonDetail(entity.id).map { pokemon ->
-                        entity.urlImage = pokemon.sprites.frontDefault
+                    pokemonClient.getPokemonDetail(resource.id).map { pokemon ->
+                        entity = pokemon.toPokemonEntity()
                     }
                 }
                 entity
+            }.collect {
+                result.add(it)
             }
 
-            if (page == 0) {
+            if (forceRefresh) {
                 pokemonDao.removeAll()
             }
             pokemonDao.insert(result)
@@ -53,10 +59,10 @@ class PokemonRepository(
         }
     }
 
-    suspend fun getPokemonDetail(id: Int): Either<Error, Pokemon> {
+    suspend fun getPokemonDetail(id: Int): Either<Error, Boolean> {
         return pokemonClient.getPokemonDetail(id).flatMap { pokemon ->
             pokemonDao.insert(pokemon.toPokemonEntity())
-            pokemon.right()
+            true.right()
         }
     }
 }

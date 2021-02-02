@@ -27,15 +27,15 @@ class MainViewModel(
 
     fun resetLoadingPokemon() {
         page = 0
-        loadMorePokemon()
+        loadMorePokemon(true)
     }
 
-    fun loadMorePokemon() {
+    fun loadMorePokemon(forceRefresh : Boolean = false) {
         if (page == 0) {
             _loading.value = true
         }
         viewModelScope.launch(Dispatchers.IO) {
-            repository.loadPokemonPage(page).fold(::handleError, ::handleSuccess)
+            repository.loadPokemonPage(page, forceRefresh).fold(::handleError, ::handleSuccess)
         }
     }
 
@@ -49,7 +49,7 @@ class MainViewModel(
 
     private fun handleError(error: Error) {
         viewModelScope.launch(Dispatchers.Main) {
-            navigator.showError("Error loading Pòkemon: ${error.message}")
+            navigator.showError("Error loading Pokemon: ${error.message}")
             _loading.value = false
         }
     }

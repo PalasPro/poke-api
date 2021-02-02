@@ -8,7 +8,7 @@ class Constants {
 
     class DataBase {
         companion object {
-            const val BD_VERSION = 2
+            const val BD_VERSION = 1
             const val BD_NAME = "bd_pokemon"
         }
     }
