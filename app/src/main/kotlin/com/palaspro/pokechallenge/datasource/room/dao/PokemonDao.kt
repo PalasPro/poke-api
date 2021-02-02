@@ -26,4 +26,7 @@ interface PokemonDao {
 
     @Query("SELECT * FROM pokemon")
     fun pokemonList(): Flow<List<PokemonEntity>>
+
+    @Query("SELECT * FROM pokemon WHERE id=:id")
+    fun pokemonDetailFlow(id : Int): Flow<PokemonEntity?>
 }

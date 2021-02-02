@@ -10,4 +10,11 @@ data class ListItem<T>(val type : Int, val item : T? = null) {
 
 data class PokemonVo(val id: Int,
                      val name: String,
-                     val urlImage : String? = null)
+                     val urlImage : String? = null,
+                     val order : Int = 0,
+                     val weight : Int = 0,
+                     val height : Int = 0,
+                     val baseExperience : Int = 0,
+                     val abilities: List<String> = listOf(),
+                     val moves: List<String> = listOf(),
+                     val types :List<String> = listOf())

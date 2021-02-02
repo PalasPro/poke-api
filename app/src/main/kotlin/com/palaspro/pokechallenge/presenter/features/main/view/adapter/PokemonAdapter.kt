@@ -1,4 +1,4 @@
-package com.palaspro.pokechallenge.presenter.feature.main.view.adapter
+package com.palaspro.pokechallenge.presenter.features.main.view.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.palaspro.pokechallenge.databinding.ItemLoadmoreBinding
 import com.palaspro.pokechallenge.databinding.ItemPokemonBinding
-import com.palaspro.pokechallenge.presenter.feature.main.view.viewholder.LoadMoreViewHolder
-import com.palaspro.pokechallenge.presenter.feature.main.view.viewholder.PokemonViewHolder
+import com.palaspro.pokechallenge.presenter.features.main.view.viewholder.LoadMoreViewHolder
+import com.palaspro.pokechallenge.presenter.features.main.view.viewholder.PokemonViewHolder
 import com.palaspro.pokechallenge.presenter.model.ListItem
 import com.palaspro.pokechallenge.presenter.model.PokemonVo
 
@@ -38,10 +38,6 @@ class PokemonAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 pokemons[position].item?.let { pokemonVo ->
                     holder.binding.itemPokeName.text = pokemonVo.name
 
-                    if(holder.binding.itemPokeImage.tag != pokemonVo.id) {
-                        holder.binding.itemPokeImage.setImageDrawable(null)
-                        holder.binding.itemPokeImage.tag = pokemonVo.id
-                    }
                     pokemonVo.urlImage?.let {  urlImage ->
                         holder.binding.itemPokeImage.load(urlImage)
                     }

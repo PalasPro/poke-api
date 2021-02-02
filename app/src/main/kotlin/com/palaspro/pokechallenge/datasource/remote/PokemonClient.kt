@@ -13,7 +13,7 @@ const val CLIENT_POKEMON_TAG = "pokemonClient"
 class PokemonClient(private val pokeApiClient: PokeApiClient) {
 
     companion object {
-        const val LIMIT = 26
+        const val LIMIT = 12
     }
 
     fun getPokemonList(page : Int) : Either<Error, NamedApiResourceList> =
