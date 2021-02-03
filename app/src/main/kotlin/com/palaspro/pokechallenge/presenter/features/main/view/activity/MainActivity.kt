@@ -3,7 +3,7 @@ package com.palaspro.pokechallenge.presenter.features.main.view.activity
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.palaspro.pokechallenge.R
-import com.palaspro.pokechallenge.base.BaseActivity
+import com.palaspro.pokechallenge.presenter.base.BaseActivity
 import com.palaspro.pokechallenge.databinding.ActivityMainBinding
 import com.palaspro.pokechallenge.presenter.features.main.view.adapter.PokemonAdapter
 import com.palaspro.pokechallenge.presenter.features.main.viewmodel.MainViewModel

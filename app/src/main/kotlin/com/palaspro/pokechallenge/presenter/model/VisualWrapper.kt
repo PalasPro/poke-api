@@ -2,6 +2,9 @@ package com.palaspro.pokechallenge.presenter.model
 
 import com.palaspro.pokechallenge.datasource.model.PokemonEntity
 
+/**
+ * Translate a list of [PokemonEntity] to a list of [PokemonVo]
+ */
 fun List<PokemonEntity>.toListItems(hasLoadMore: Boolean): List<ListItem<PokemonVo>> {
     val listItems = ArrayList<ListItem<PokemonVo>>()
     forEach {
@@ -13,6 +16,9 @@ fun List<PokemonEntity>.toListItems(hasLoadMore: Boolean): List<ListItem<Pokemon
     return listItems
 }
 
+/**
+ * Translate a [PokemonEntity] to a [PokemonVo]
+ */
 fun PokemonEntity.toVisualObject(): PokemonVo =
         PokemonVo(
                 id,

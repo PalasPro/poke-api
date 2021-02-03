@@ -32,12 +32,13 @@ val modulesPresentation = module(override = true) {
     }
 }
 
+// domain layer dependencies
 val modulesDomain = module(override = true) {
 
     factory(named(REPOSITORY_POKEMON_TAG)) { PokemonRepository(get(named(CLIENT_POKEMON_TAG)), get(named(DAO_POKEMON_TAG))) }
-
 }
 
+// data source dependencies
 val modulesDataSource = module(override = true) {
 
     single(named(CLIENT_POKEMON_TAG)) { PokemonClient(PokeApiClient()) }
@@ -45,5 +46,4 @@ val modulesDataSource = module(override = true) {
     single(named(DAO_POKEMON_TAG)) {
         Room.databaseBuilder(androidContext(), PokemonDatabase::class.java, Constants.DataBase.BD_NAME).build().pokemonDao()
     }
-
 }

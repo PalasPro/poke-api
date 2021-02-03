@@ -1,8 +1,12 @@
 package com.palaspro.pokechallenge.domain.model
 
 import com.palaspro.pokechallenge.datasource.model.PokemonEntity
+import com.palaspro.pokechallenge.presenter.model.PokemonVo
 import me.sargunvohra.lib.pokekotlin.model.Pokemon
 
+/**
+ * Translate a [Pokemon] to a [PokemonEntity]
+ */
 fun Pokemon.toPokemonEntity() =
         PokemonEntity(
                 id = id,

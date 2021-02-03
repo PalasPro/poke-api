@@ -25,7 +25,7 @@ interface PokemonDao {
     suspend fun getPokemon(id : Int) : PokemonEntity?
 
     @Query("SELECT * FROM pokemon")
-    fun pokemonList(): Flow<List<PokemonEntity>>
+    fun pokemonListFlow(): Flow<List<PokemonEntity>>
 
     @Query("SELECT * FROM pokemon WHERE id=:id")
     fun pokemonDetailFlow(id : Int): Flow<PokemonEntity?>
