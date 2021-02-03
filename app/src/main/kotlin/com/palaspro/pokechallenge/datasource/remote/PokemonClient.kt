@@ -15,6 +15,7 @@ interface PokemonClient {
     fun getPokemonList(page: Int): Either<Error, NamedApiResourceList>
 
     fun getPokemonDetail(id: Int): Either<Error, Pokemon>
+
 }
 
 class PokemonClientImpl(private val pokeApiClient: PokeApiClient) : PokemonClient {
