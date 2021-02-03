@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">PokeChallege</string>
+
+    <string name="detail_title">Pokemon Detail</string>
+    <string name="detail_order">#%1$d</string>
+    <string name="detail_weight">%1$d Kg</string>
+    <string name="detail_height">%1$d cm</string>
+    <string name="detail_weight_label">Weight</string>
+    <string name="detail_height_label">Height</string>
+    <string name="detail_experience_label">Experience</string>
+    <string name="detail_types_label">Types</string>
+    <string name="detail_abilities_label">Abilities</string>
+    <string name="detail_moves_label">Moves</string>
+</resources>
