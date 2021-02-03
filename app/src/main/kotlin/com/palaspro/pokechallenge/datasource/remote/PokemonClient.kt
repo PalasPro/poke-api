@@ -15,6 +15,8 @@ interface PokemonClient {
     fun getPokemonList(page: Int): Either<Error, NamedApiResourceList>
 
     fun getPokemonDetail(id: Int): Either<Error, Pokemon>
+
+    fun changeFavoriteStatus(id: Int, favorite: Boolean): Either<Error, Boolean>
 }
 
 class PokemonClientImpl(private val pokeApiClient: PokeApiClient) : PokemonClient {
@@ -37,5 +39,10 @@ class PokemonClientImpl(private val pokeApiClient: PokeApiClient) : PokemonClien
             } catch (e: ErrorResponse) {
                 Error().left()
             }
+
+    override fun changeFavoriteStatus(id: Int, favorite: Boolean): Either<Error, Boolean> =
+        // TODO
+        true.right()
+
 
 }

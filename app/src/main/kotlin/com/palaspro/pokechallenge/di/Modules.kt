@@ -48,6 +48,6 @@ val modulesDataSource = module(override = true) {
     single<PokemonClient>(named(CLIENT_POKEMON_TAG)) { PokemonClientImpl(PokeApiClient()) }
 
     single(named(DAO_POKEMON_TAG)) {
-        Room.databaseBuilder(androidContext(), PokemonDatabase::class.java, Constants.DataBase.BD_NAME).build().pokemonDao()
+        Room.databaseBuilder(androidContext(), PokemonDatabase::class.java, Constants.DataBase.BD_NAME).fallbackToDestructiveMigration().build().pokemonDao()
     }
 }

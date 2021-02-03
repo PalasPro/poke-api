@@ -11,4 +11,5 @@
     <string name="detail_types_label">Types</string>
     <string name="detail_abilities_label">Abilities</string>
     <string name="detail_moves_label">Moves</string>
+    <string name="detail_menu_favorite">Favorite</string>
 </resources>

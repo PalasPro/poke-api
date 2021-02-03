@@ -1,7 +1,10 @@
 package com.palaspro.pokechallenge.presenter.features.detail.view.activity
 
 import android.os.Bundle
+import android.view.ContextMenu
+import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
@@ -22,6 +25,8 @@ class DetailActivity : BaseActivity() {
     }
 
     private lateinit var binding: ActivityDetailBinding
+    private var menu : Menu? = null
+
     private val adapterAbilities = ListStringAdapter()
     private val adapterMoves = ListStringAdapter()
     private val adapterTypes = ListStringAdapter()
@@ -36,10 +41,32 @@ class DetailActivity : BaseActivity() {
         viewModelDetail.onCreateActivity()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_detail, menu)
+        this.menu = menu
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+            when (item.itemId) {
+                android.R.id.home -> {
+                    onBackPressed()
+                    true
+                }
+                R.id.menu_detail_favorite -> {
+                    viewModelDetail.changeFavoriteStatus()
+                    true
+                }
+                else -> {
+                    super.onOptionsItemSelected(item)
+                }
+            }
+
     private fun setupObservers() {
         lifecycleScope.launchWhenStarted {
             viewModelDetail.loading.collect { isLoading ->
                 binding.detailSwipeRefresh.isRefreshing = isLoading
+                menu?.findItem(R.id.menu_detail_favorite)?.isEnabled = !isLoading
             }
         }
         lifecycleScope.launchWhenStarted {
@@ -55,6 +82,15 @@ class DetailActivity : BaseActivity() {
                     adapterAbilities.items = pokemon.abilities
                     adapterMoves.items = pokemon.moves
                     adapterTypes.items = pokemon.types
+
+                    menu?.findItem(R.id.menu_detail_favorite)?.let { menuItem ->
+                        menuItem.isVisible = true
+                        if(pokemon.isFavorite) {
+                            menuItem.setIcon(R.drawable.ic_favorite_on)
+                        } else {
+                            menuItem.setIcon(R.drawable.ic_favorite_off)
+                        }
+                    }
                 }
             }
         }
@@ -76,15 +112,5 @@ class DetailActivity : BaseActivity() {
         binding.detailSwipeRefresh.setOnRefreshListener { viewModelDetail.loadPokemonDetail() }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean =
-            when (item.itemId) {
-                android.R.id.home -> {
-                    onBackPressed()
-                    true
-                }
-                else -> {
-                    super.onOptionsItemSelected(item)
-                }
-            }
 
 }
