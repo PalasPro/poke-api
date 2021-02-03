@@ -32,7 +32,6 @@ Where the user see the data.
   - **Androidx**
   - **Room**
   - **ViewModel**
-  - **LiveData**
   - **ViewBinding**
 - Other relevant libraries:
   - Functional programming: **Arrow**
@@ -40,4 +39,6 @@ Where the user see the data.
   - To load images: **Coin**
 
 ## Extras
+- JUnit tests
+- Instrumentation tests
 - Adaption UI to mobile orientation changes

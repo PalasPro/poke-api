@@ -1,12 +1,17 @@
 package com.palaspro.pokechallenge.presenter.features.main.view.activity
 
 import android.os.Bundle
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.palaspro.pokechallenge.R
-import com.palaspro.pokechallenge.presenter.base.BaseActivity
 import com.palaspro.pokechallenge.databinding.ActivityMainBinding
+import com.palaspro.pokechallenge.databinding.ItemPokemonBinding
+import com.palaspro.pokechallenge.presenter.base.BaseActivity
 import com.palaspro.pokechallenge.presenter.features.main.view.adapter.PokemonAdapter
 import com.palaspro.pokechallenge.presenter.features.main.viewmodel.MainViewModel
+import kotlinx.coroutines.flow.collect
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity() {
@@ -20,6 +25,7 @@ class MainActivity : BaseActivity() {
         override fun onPokemonSelected(id: Int) {
             viewModelMain.navigateToDetail(id)
         }
+
         override fun loadMore() {
             viewModelMain.loadMorePokemon()
         }
@@ -36,11 +42,15 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupObservers() {
-        viewModelMain.pokemonList.observe(this) { pokemonList ->
-            adapter.pokemons = pokemonList
+        lifecycleScope.launchWhenStarted {
+            viewModelMain.pokemonList.collect { pokemonList ->
+                adapter.pokemons = pokemonList
+            }
         }
-        viewModelMain.loading.observe(this) { isLoading ->
-            binding.mainSwipeRefresh.isRefreshing = isLoading
+        lifecycleScope.launchWhenStarted {
+            viewModelMain.loading.collect { isLoading ->
+                binding.mainSwipeRefresh.isRefreshing = isLoading
+            }
         }
     }
 
