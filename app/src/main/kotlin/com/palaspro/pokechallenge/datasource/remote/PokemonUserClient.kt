@@ -24,7 +24,7 @@ class PokemonUserClientImpl(private val retrofit: Retrofit) : PokemonUserClient 
             result.isSuccessful.right()
         }catch (e : Exception) {
             e.printStackTrace()
-            Error(e.message).left()
+            Error("Server error, try later.").left()
         }
     }
 
