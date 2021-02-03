@@ -39,3 +39,5 @@ Where the user see the data.
   - Wrapper Library for Kotlin **PokeKotlin** by sargunster
   - To load images: **Coin**
 
+## Extras
+- Adaption UI to mobile orientation changes
