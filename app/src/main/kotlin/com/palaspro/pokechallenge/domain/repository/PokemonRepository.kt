@@ -8,28 +8,26 @@ import com.palaspro.pokechallenge.datasource.model.toPokemonEntity
 import com.palaspro.pokechallenge.datasource.remote.PokemonClient
 import com.palaspro.pokechallenge.datasource.room.dao.PokemonDao
 import com.palaspro.pokechallenge.domain.model.toPokemonEntity
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 
 const val REPOSITORY_POKEMON_TAG = "pokemonRepository"
 
-class PokemonRepository(
-        private val pokemonClient: PokemonClient,
-        private val pokemonDao: PokemonDao) {
-
+interface PokemonRepository {
     /**
      * Flow data of the table [PokemonEntity]. To listen any change in the database data about the list of pokemon
      * @return [Flow]
      */
-    fun getPokemonListFlow() = pokemonDao.pokemonListFlow()
+    fun getPokemonListFlow() : Flow<List<PokemonEntity>>
 
     /**
      * Flow data of a pokemon
      * @param [id] of a pokemon
      * @return [Flow]
      */
-    fun getPokemonDetailFlow(id: Int) = pokemonDao.pokemonDetailFlow(id)
+    fun getPokemonDetailFlow(id: Int) : Flow<PokemonEntity?>
 
     /**
      * The method request a page list of Pokemons
@@ -38,7 +36,26 @@ class PokemonRepository(
      * @return [Either] If has more pages, return true, i.o.c, false. When an error happen, it will
      * be in the left side
      */
-    suspend fun loadPokemonPage(page: Int, forceRefresh : Boolean = false): Either<Error, Boolean> {
+    suspend fun loadPokemonPage(page: Int, forceRefresh : Boolean = false): Either<Error, Boolean>
+
+    /**
+     * Request the detail of a Pokemon
+     * @param [id] of a Pokemon
+     * @return [Either] If it is success, return true, i.o.c, false. When an error happen, it will
+     * be in the left side
+     */
+    suspend fun getPokemonDetail(id: Int): Either<Error, Boolean>
+}
+
+class PokemonRepositoryImpl(
+        private val pokemonClient: PokemonClient,
+        private val pokemonDao: PokemonDao) : PokemonRepository {
+
+    override fun getPokemonListFlow() = pokemonDao.pokemonListFlow()
+
+    override fun getPokemonDetailFlow(id: Int) = pokemonDao.pokemonDetailFlow(id)
+
+    override suspend fun loadPokemonPage(page: Int, forceRefresh : Boolean): Either<Error, Boolean> {
         return pokemonClient.getPokemonList(page).flatMap { namedApiResourceList ->
             val result = arrayListOf<PokemonEntity>()
             namedApiResourceList.results.asFlow().map { resource ->
@@ -71,13 +88,7 @@ class PokemonRepository(
         }
     }
 
-    /**
-     * Request the detail of a Pokemon
-     * @param [id] of a Pokemon
-     * @return [Either] If it is success, return true, i.o.c, false. When an error happen, it will
-     * be in the left side
-     */
-    suspend fun getPokemonDetail(id: Int): Either<Error, Boolean> {
+    override suspend fun getPokemonDetail(id: Int): Either<Error, Boolean> {
         return pokemonClient.getPokemonDetail(id).flatMap { pokemon ->
             pokemonDao.insert(pokemon.toPokemonEntity())
             true.right()

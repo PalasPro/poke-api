@@ -4,12 +4,17 @@ import android.widget.Toast
 import com.palaspro.pokechallenge.presenter.base.BaseNavigator
 import com.palaspro.pokechallenge.presenter.features.detail.view.activity.DetailActivity
 
-class DetailNavigator(val activity: DetailActivity) : BaseNavigator() {
+interface DetailNavigator {
 
     /**
      * Show errors, in this case, with toast
      */
-    fun showError(message: String) {
+    fun showError(message: String)
+}
+
+class DetailNavigatorImpl(val activity: DetailActivity) : BaseNavigator(), DetailNavigator {
+
+    override fun showError(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 

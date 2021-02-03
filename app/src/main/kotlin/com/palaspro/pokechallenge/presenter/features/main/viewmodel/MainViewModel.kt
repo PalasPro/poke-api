@@ -8,6 +8,7 @@ import com.palaspro.pokechallenge.domain.repository.PokemonRepository
 import com.palaspro.pokechallenge.presenter.features.main.navigator.MainNavigator
 import com.palaspro.pokechallenge.presenter.model.toListItems
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -18,12 +19,12 @@ class MainViewModel(
     /**
      * Current page to request
      */
-    private var page = 0
+    var page = 0
 
     /**
      * Listening the data source changes
      */
-    val pokemonList = repository.getPokemonListFlow().asLiveData(viewModelScope.coroutineContext).map {
+    val pokemonList = repository.getPokemonListFlow().map {
         it.toListItems(page > 0)
     }
 

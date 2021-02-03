@@ -1,8 +1,6 @@
 package com.palaspro.pokechallenge.presenter.features.detail.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.palaspro.pokechallenge.presenter.base.BaseViewModel
 import com.palaspro.pokechallenge.domain.model.Constants
@@ -10,6 +8,7 @@ import com.palaspro.pokechallenge.domain.repository.PokemonRepository
 import com.palaspro.pokechallenge.presenter.features.detail.navigator.DetailNavigator
 import com.palaspro.pokechallenge.presenter.model.toVisualObject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class DetailViewModel(
@@ -20,7 +19,7 @@ class DetailViewModel(
     /**
      * Listening the data source changes
      */
-    val pokemonDetail = repository.getPokemonDetailFlow(id).asLiveData(viewModelScope.coroutineContext).map { pokemonEntity ->
+    val pokemonDetail = repository.getPokemonDetailFlow(id).map {  pokemonEntity ->
         pokemonEntity?.toVisualObject()
     }
 

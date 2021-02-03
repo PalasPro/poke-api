@@ -10,24 +10,31 @@ import me.sargunvohra.lib.pokekotlin.model.Pokemon
 
 const val CLIENT_POKEMON_TAG = "pokemonClient"
 
-class PokemonClient(private val pokeApiClient: PokeApiClient) {
+interface PokemonClient {
+
+    fun getPokemonList(page: Int): Either<Error, NamedApiResourceList>
+
+    fun getPokemonDetail(id: Int): Either<Error, Pokemon>
+}
+
+class PokemonClientImpl(private val pokeApiClient: PokeApiClient) : PokemonClient {
 
     companion object {
         const val LIMIT = 12
     }
 
-    fun getPokemonList(page : Int) : Either<Error, NamedApiResourceList> =
-            try{
+    override fun getPokemonList(page: Int): Either<Error, NamedApiResourceList> =
+            try {
                 pokeApiClient.getPokemonList(page * LIMIT, LIMIT).right()
-            } catch (e : ErrorResponse) {
+            } catch (e: ErrorResponse) {
                 Error().left()
             }
 
 
-    fun getPokemonDetail(id : Int): Either<Error, Pokemon>  =
+    override fun getPokemonDetail(id: Int): Either<Error, Pokemon> =
             try {
                 pokeApiClient.getPokemon(id).right()
-            } catch (e : ErrorResponse) {
+            } catch (e: ErrorResponse) {
                 Error().left()
             }
 
