@@ -1,10 +1,10 @@
 package com.palaspro.pokechallenge.presenter.features.main.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.*
-import com.palaspro.pokechallenge.presenter.base.BaseViewModel
+import androidx.lifecycle.viewModelScope
 import com.palaspro.pokechallenge.domain.model.Constants
 import com.palaspro.pokechallenge.domain.repository.PokemonRepository
+import com.palaspro.pokechallenge.presenter.base.BaseViewModel
 import com.palaspro.pokechallenge.presenter.features.main.navigator.MainNavigator
 import com.palaspro.pokechallenge.presenter.model.toListItems
 import kotlinx.coroutines.Dispatchers

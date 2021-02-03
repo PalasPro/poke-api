@@ -6,6 +6,7 @@
         <item name="colorPrimaryDark">@color/colorSecondaryDark</item>
         <item name="colorAccent">@color/colorPrimary</item>
         <!-- Customize your theme here. -->
+<!--        <item name="android:windowActivityTransitions">true</item>-->
     </style>
 
     <style name="Theme.Pokeapi.NoActionBar">

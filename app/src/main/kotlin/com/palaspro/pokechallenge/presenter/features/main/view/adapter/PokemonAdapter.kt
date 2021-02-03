@@ -33,12 +33,12 @@ class PokemonAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(holder){
+        when (holder) {
             is PokemonViewHolder -> {
                 pokemons[position].item?.let { pokemonVo ->
                     holder.binding.itemPokeName.text = pokemonVo.name
 
-                    pokemonVo.urlImage?.let {  urlImage ->
+                    pokemonVo.urlImage?.let { urlImage ->
                         holder.binding.itemPokeImage.load(urlImage)
                     }
 

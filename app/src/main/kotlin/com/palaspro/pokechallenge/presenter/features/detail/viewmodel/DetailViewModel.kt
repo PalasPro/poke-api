@@ -19,7 +19,7 @@ class DetailViewModel(
     /**
      * Listening the data source changes
      */
-    val pokemonDetail = repository.getPokemonDetailFlow(id).map {  pokemonEntity ->
+    val pokemonDetail = repository.getPokemonDetailFlow(id).map { pokemonEntity ->
         pokemonEntity?.toVisualObject()
     }
 

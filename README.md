@@ -39,5 +39,6 @@ Where the user see the data.
   - To load images: **Coin**
 
 ## Extras
-- JUnit test
+- JUnit tests
+- Instrumentation tests
 - Adaption UI to mobile orientation changes
