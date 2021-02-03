@@ -36,11 +36,24 @@ class DetailViewModel(
     fun loadPokemonDetail() {
         loadingMutable.value = true
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getPokemonDetail(id).fold(::handleError) { handleSuccess() }
+            repository.getPokemonDetail(id).fold(::handleError) { handleSuccessLoad() }
         }
     }
 
-    private fun handleSuccess() {
+    /**
+     * Request to change the favorite status
+     */
+    fun changeFavoriteStatus() {
+        loadingMutable.value = true
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.changeFavoriteStatus(id).fold(::handleError) {
+                loadingMutable.value = false
+                Log.d(Constants.TAG, "Pokemon preference changed.")
+            }
+        }
+    }
+
+    private fun handleSuccessLoad() {
         viewModelScope.launch(Dispatchers.Main) {
             loadingMutable.value = false
             Log.d(Constants.TAG, "Pokemon loaded.")
@@ -50,8 +63,9 @@ class DetailViewModel(
     private fun handleError(error: Error) {
         viewModelScope.launch(Dispatchers.Main) {
             loadingMutable.value = false
-            navigator.showError("Error loadind detail. ${error.message} ")
+            navigator.showError("Error: ${error.message} ")
         }
     }
+
 
 }

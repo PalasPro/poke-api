@@ -28,6 +28,7 @@ fun PokemonEntity.toVisualObject(): PokemonVo =
                 weight,
                 height,
                 baseExperience,
+                isFavorite = isFavorite,
                 abilities = abilities.filter { it.isNotEmpty() },
                 moves = moves.filter { it.isNotEmpty() },
                 types = types.filter { it.isNotEmpty() })

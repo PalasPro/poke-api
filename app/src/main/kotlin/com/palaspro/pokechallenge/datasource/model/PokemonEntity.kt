@@ -14,6 +14,7 @@ class PokemonEntity(
         val weight : Int = 0,
         val height : Int = 0,
         val baseExperience : Int = 0,
+        var isFavorite : Boolean = false,
         val abilities: List<String> = listOf(),
         val moves: List<String> = listOf(),
-        val types :List<String> = listOf())
+        val types :List<String> = listOf(),)
