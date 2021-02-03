@@ -25,7 +25,6 @@ class DetailActivity : BaseActivity() {
     }
 
     private lateinit var binding: ActivityDetailBinding
-    private var menu : Menu? = null
 
     private val adapterAbilities = ListStringAdapter()
     private val adapterMoves = ListStringAdapter()
@@ -41,20 +40,10 @@ class DetailActivity : BaseActivity() {
         viewModelDetail.onCreateActivity()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_detail, menu)
-        this.menu = menu
-        return super.onCreateOptionsMenu(menu)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
             when (item.itemId) {
                 android.R.id.home -> {
                     onBackPressed()
-                    true
-                }
-                R.id.menu_detail_favorite -> {
-                    viewModelDetail.changeFavoriteStatus()
                     true
                 }
                 else -> {
@@ -66,7 +55,7 @@ class DetailActivity : BaseActivity() {
         lifecycleScope.launchWhenStarted {
             viewModelDetail.loading.collect { isLoading ->
                 binding.detailSwipeRefresh.isRefreshing = isLoading
-                menu?.findItem(R.id.menu_detail_favorite)?.isEnabled = !isLoading
+                binding.detailPokeFavorite.isEnabled = !isLoading
             }
         }
         lifecycleScope.launchWhenStarted {
@@ -83,13 +72,12 @@ class DetailActivity : BaseActivity() {
                     adapterMoves.items = pokemon.moves
                     adapterTypes.items = pokemon.types
 
-                    menu?.findItem(R.id.menu_detail_favorite)?.let { menuItem ->
-                        menuItem.isVisible = true
-                        if(pokemon.isFavorite) {
-                            menuItem.setIcon(R.drawable.ic_favorite_on)
-                        } else {
-                            menuItem.setIcon(R.drawable.ic_favorite_off)
-                        }
+                    binding.detailPokeFavorite.isEnabled = true
+                    binding.detailPokeFavorite.visibility = View.VISIBLE
+                    if(pokemon.isFavorite) {
+                        binding.detailPokeFavorite.setImageResource(R.drawable.ic_favorite_on)
+                    } else {
+                        binding.detailPokeFavorite.setImageResource(R.drawable.ic_favorite_off)
                     }
                 }
             }
@@ -110,6 +98,8 @@ class DetailActivity : BaseActivity() {
         binding.detailTypeList.adapter = adapterTypes
 
         binding.detailSwipeRefresh.setOnRefreshListener { viewModelDetail.loadPokemonDetail() }
+
+        binding.detailPokeFavorite.setOnClickListener { viewModelDetail.changeFavoriteStatus() }
     }
 
 
