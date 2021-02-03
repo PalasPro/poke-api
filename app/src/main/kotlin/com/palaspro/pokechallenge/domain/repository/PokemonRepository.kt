@@ -7,6 +7,7 @@ import arrow.core.right
 import com.palaspro.pokechallenge.datasource.model.PokemonEntity
 import com.palaspro.pokechallenge.datasource.model.toPokemonEntity
 import com.palaspro.pokechallenge.datasource.remote.PokemonClient
+import com.palaspro.pokechallenge.datasource.remote.PokemonUserClient
 import com.palaspro.pokechallenge.datasource.room.dao.PokemonDao
 import com.palaspro.pokechallenge.domain.model.toPokemonEntity
 import kotlinx.coroutines.flow.Flow
@@ -57,6 +58,7 @@ interface PokemonRepository {
 
 class PokemonRepositoryImpl(
         private val pokemonClient: PokemonClient,
+        private val pokemonUserClient : PokemonUserClient,
         private val pokemonDao: PokemonDao) : PokemonRepository {
 
     override fun getPokemonListFlow() = pokemonDao.pokemonListFlow()
@@ -105,7 +107,7 @@ class PokemonRepositoryImpl(
 
     override suspend fun changeFavoriteStatus(id: Int): Either<Error, Boolean> =
         pokemonDao.getPokemon(id)?.let { pokemonEntity ->
-            pokemonClient.changeFavoriteStatus(id, !pokemonEntity.isFavorite).flatMap {
+            pokemonUserClient.changeFavoriteStatus(id, !pokemonEntity.isFavorite).flatMap {
                 pokemonEntity.isFavorite = !pokemonEntity.isFavorite
                 pokemonDao.insert(pokemonEntity)
                 true.right()

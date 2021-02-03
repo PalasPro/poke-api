@@ -42,3 +42,4 @@ Where the user see the data.
 - JUnit tests
 - Instrumentation tests
 - Adaption UI to mobile orientation changes
+- Favorite status. You can see the network responses [here](https://webhook.site/a1dfe050-4748-437d-8040-fe60f4917923)

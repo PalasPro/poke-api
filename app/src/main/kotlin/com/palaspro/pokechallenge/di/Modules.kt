@@ -1,9 +1,7 @@
 package com.palaspro.pokechallenge.di
 
 import androidx.room.Room
-import com.palaspro.pokechallenge.datasource.remote.CLIENT_POKEMON_TAG
-import com.palaspro.pokechallenge.datasource.remote.PokemonClient
-import com.palaspro.pokechallenge.datasource.remote.PokemonClientImpl
+import com.palaspro.pokechallenge.datasource.remote.*
 import com.palaspro.pokechallenge.datasource.room.PokemonDatabase
 import com.palaspro.pokechallenge.datasource.room.dao.DAO_POKEMON_TAG
 import com.palaspro.pokechallenge.domain.model.Constants
@@ -23,6 +21,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import retrofit2.Retrofit
 
 // presentation layer dependencies
 val modulesPresentation = module(override = true) {
@@ -39,7 +38,7 @@ val modulesPresentation = module(override = true) {
 // domain layer dependencies
 val modulesDomain = module(override = true) {
 
-    factory<PokemonRepository>(named(REPOSITORY_POKEMON_TAG)) { PokemonRepositoryImpl(get(named(CLIENT_POKEMON_TAG)), get(named(DAO_POKEMON_TAG))) }
+    factory<PokemonRepository>(named(REPOSITORY_POKEMON_TAG)) { PokemonRepositoryImpl(get(named(CLIENT_POKEMON_TAG)), get(named(CLIENT_USER_POKEMON_TAG)), get(named(DAO_POKEMON_TAG))) }
 }
 
 // data source dependencies
@@ -47,7 +46,15 @@ val modulesDataSource = module(override = true) {
 
     single<PokemonClient>(named(CLIENT_POKEMON_TAG)) { PokemonClientImpl(PokeApiClient()) }
 
+    single<PokemonUserClient>(named(CLIENT_USER_POKEMON_TAG)) { PokemonUserClientImpl(get(named(RETROFIT_USER_POKEMON_TAG))) }
+
     single(named(DAO_POKEMON_TAG)) {
         Room.databaseBuilder(androidContext(), PokemonDatabase::class.java, Constants.DataBase.BD_NAME).fallbackToDestructiveMigration().build().pokemonDao()
+    }
+
+    single<Retrofit>(named(RETROFIT_USER_POKEMON_TAG)) {
+        Retrofit.Builder()
+                .baseUrl(URL_BASE_USER_POKEMON)
+                .build()
     }
 }
