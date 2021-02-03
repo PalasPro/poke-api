@@ -1,6 +1,10 @@
 package com.palaspro.pokechallenge.presenter.model
 
-
+/**
+ * Class to use in the visual list, like a recycler view.
+ * @param [type] is the type of item
+ * @param [item] is the data of the item. It can be null
+ */
 data class ListItem<T>(val type : Int, val item : T? = null) {
     companion object {
         const val TYPE_ITEM = 0
@@ -8,6 +12,9 @@ data class ListItem<T>(val type : Int, val item : T? = null) {
     }
 }
 
+/**
+ * Class that represent a Pokemon Visual Object
+ */
 data class PokemonVo(val id: Int,
                      val name: String,
                      val urlImage : String? = null,

@@ -11,7 +11,6 @@ import com.palaspro.pokechallenge.domain.model.toPokemonEntity
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
-import me.sargunvohra.lib.pokekotlin.model.Pokemon
 
 const val REPOSITORY_POKEMON_TAG = "pokemonRepository"
 
@@ -19,11 +18,27 @@ class PokemonRepository(
         private val pokemonClient: PokemonClient,
         private val pokemonDao: PokemonDao) {
 
-    fun getPokemonListFlow() = pokemonDao.pokemonList()
+    /**
+     * Flow data of the table [PokemonEntity]. To listen any change in the database data about the list of pokemon
+     * @return [Flow]
+     */
+    fun getPokemonListFlow() = pokemonDao.pokemonListFlow()
 
+    /**
+     * Flow data of a pokemon
+     * @param [id] of a pokemon
+     * @return [Flow]
+     */
     fun getPokemonDetailFlow(id: Int) = pokemonDao.pokemonDetailFlow(id)
 
-    suspend fun loadPokemonPage(page: Int, forceRefresh : Boolean = false): Either<Error, Int> {
+    /**
+     * The method request a page list of Pokemons
+     * @param [page] to request
+     * @param [forceRefresh] boolean to reset the data source
+     * @return [Either] If has more pages, return true, i.o.c, false. When an error happen, it will
+     * be in the left side
+     */
+    suspend fun loadPokemonPage(page: Int, forceRefresh : Boolean = false): Either<Error, Boolean> {
         return pokemonClient.getPokemonList(page).flatMap { namedApiResourceList ->
             val result = arrayListOf<PokemonEntity>()
             namedApiResourceList.results.asFlow().map { resource ->
@@ -51,14 +66,17 @@ class PokemonRepository(
             }
             pokemonDao.insert(result)
 
-            if (page * PokemonClient.LIMIT > namedApiResourceList.count) {
-                -1
-            } else {
-                page + 1
-            }.right()
+
+            (namedApiResourceList.next != null).right()
         }
     }
 
+    /**
+     * Request the detail of a Pokemon
+     * @param [id] of a Pokemon
+     * @return [Either] If it is success, return true, i.o.c, false. When an error happen, it will
+     * be in the left side
+     */
     suspend fun getPokemonDetail(id: Int): Either<Error, Boolean> {
         return pokemonClient.getPokemonDetail(id).flatMap { pokemon ->
             pokemonDao.insert(pokemon.toPokemonEntity())

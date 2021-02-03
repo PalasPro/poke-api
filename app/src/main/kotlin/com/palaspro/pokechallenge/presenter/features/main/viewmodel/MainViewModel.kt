@@ -2,7 +2,7 @@ package com.palaspro.pokechallenge.presenter.features.main.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.palaspro.pokechallenge.base.BaseViewModel
+import com.palaspro.pokechallenge.presenter.base.BaseViewModel
 import com.palaspro.pokechallenge.domain.model.Constants
 import com.palaspro.pokechallenge.domain.repository.PokemonRepository
 import com.palaspro.pokechallenge.presenter.features.main.navigator.MainNavigator
@@ -15,47 +15,69 @@ class MainViewModel(
         private var repository: PokemonRepository
 ) : BaseViewModel() {
 
+    /**
+     * Current page to request
+     */
     private var page = 0
 
+    /**
+     * Listening the data source changes
+     */
     val pokemonList = repository.getPokemonListFlow().asLiveData(viewModelScope.coroutineContext).map {
         it.toListItems(page > 0)
     }
 
+    /**
+     * This function is called in the creation of an activity
+     */
     override fun onCreateActivity() {
         loadMorePokemon()
     }
 
+    /**
+     * Force to reset the data loaded, starting in the first page
+     */
     fun resetLoadingPokemon() {
         page = 0
         loadMorePokemon(true)
     }
 
+    /**
+     * Request a page of pokemon
+     */
     fun loadMorePokemon(forceRefresh : Boolean = false) {
         if (page == 0) {
-            _loading.value = true
+            loadingMutable.value = true
         }
         viewModelScope.launch(Dispatchers.IO) {
             repository.loadPokemonPage(page, forceRefresh).fold(::handleError, ::handleSuccess)
         }
     }
 
-    private fun handleSuccess(newPage: Int) {
-        Log.d(Constants.TAG, "new page: $newPage")
-        page = newPage
+    /**
+     * Navigation to detail of a Pokemon
+     */
+    fun navigateToDetail(id: Int) {
+        navigator.navigateToDetail(id)
+    }
+
+    private fun handleSuccess(hasNext: Boolean) {
+        if(hasNext) {
+            page++
+        } else {
+            page = -1
+        }
+        Log.d(Constants.TAG, "new page: $page")
         viewModelScope.launch(Dispatchers.Main) {
-            _loading.value = false
+            loadingMutable.value = false
         }
     }
 
     private fun handleError(error: Error) {
         viewModelScope.launch(Dispatchers.Main) {
             navigator.showError("Error loading Pokemon: ${error.message}")
-            _loading.value = false
+            loadingMutable.value = false
         }
-    }
-
-    fun navigateToDetail(id: Int) {
-        navigator.navigateToDetail(id)
     }
 
 }

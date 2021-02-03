@@ -5,7 +5,7 @@ import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.palaspro.pokechallenge.R
-import com.palaspro.pokechallenge.base.BaseActivity
+import com.palaspro.pokechallenge.presenter.base.BaseActivity
 import com.palaspro.pokechallenge.databinding.ActivityDetailBinding
 import com.palaspro.pokechallenge.domain.model.Constants
 import com.palaspro.pokechallenge.presenter.features.detail.view.adapter.ListStringAdapter

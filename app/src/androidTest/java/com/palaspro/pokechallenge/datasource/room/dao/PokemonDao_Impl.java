@@ -69,8 +69,7 @@ public final class PokemonDao_Impl implements PokemonDao {
     }, p1);
   }
 
-  @Override
-  public Flow<List<PokemonEntity>> pokemonList() {
+  public Flow<List<PokemonEntity>> pokemonListFlow() {
     final String _sql = "SELECT * FROM pokemon";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
     return CoroutinesRoom.createFlow(__db, false, new String[]{"pokemon"}, new Callable<List<PokemonEntity>>() {
