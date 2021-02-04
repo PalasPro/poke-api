@@ -108,23 +108,20 @@ class PokemonRepositoryImpl(
             flow {
                 val pokemonUpdate = arrayListOf<PokemonEntity>()
                 results.map { resource ->
-                    fetchDaoAndGetDetailCoroutine(pokemonUpdate, resource)
+                    scopeRepository.launch(Dispatchers.IO) {
+                        var entity = resource.toPokemonEntity()
+                        val oldEntity = pokemonDao.getPokemon(resource.id)
+                        pokemonClient.getPokemonDetail(resource.id).map { pokemon ->
+                            entity = pokemon.toPokemonEntity(oldEntity?.isFavorite ?: false)
+                        }
+
+                        Log.d(Constants.TAG, "Refreshed: ${entity.id}")
+                        pokemonUpdate.add(entity)
+                    }
                 }.toList().map {
                     it.join()
                 }
                 emit(pokemonUpdate)
-            }
-
-    private fun fetchDaoAndGetDetailCoroutine(pokemonUpdate: ArrayList<PokemonEntity>, resource: NamedApiResource): Job =
-            scopeRepository.launch(Dispatchers.IO) {
-                var entity = resource.toPokemonEntity()
-                val oldEntity = pokemonDao.getPokemon(resource.id)
-                pokemonClient.getPokemonDetail(resource.id).map { pokemon ->
-                    entity = pokemon.toPokemonEntity(oldEntity?.isFavorite ?: false)
-                }
-
-                Log.d(Constants.TAG, "Refreshed: ${entity.id}")
-                pokemonUpdate.add(entity)
             }
 
 //    private fun refreshPokemonDataConcurrent(results: List<NamedApiResource>): List<PokemonEntity> =
@@ -183,5 +180,4 @@ class PokemonRepositoryImpl(
 //                }
 //                emit(entityToUpdate)
 //            }
-
 }
