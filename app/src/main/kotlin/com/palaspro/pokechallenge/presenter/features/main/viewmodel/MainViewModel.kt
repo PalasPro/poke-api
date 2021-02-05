@@ -51,7 +51,7 @@ class MainViewModel(
             loadingMutable.value = true
         }
         viewModelScope.launch(Dispatchers.IO) {
-            repository.loadPokemonPage(page, forceRefresh).fold(::handleError, ::handleSuccess)
+            repository.loadAndCachePokemonPage(page, forceRefresh).fold(::handleError, ::handleSuccess)
         }
     }
 

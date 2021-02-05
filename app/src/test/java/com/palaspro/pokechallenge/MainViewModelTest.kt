@@ -50,7 +50,7 @@ class MainViewModelTest : KoinTest {
         viewModel.onCreateActivity()
         // then
         verifyBlocking(mockRepository) {
-            loadPokemonPage(viewModel.page)
+            loadAndCachePokemonPage(viewModel.page)
         }
         Assert.assertEquals(0 , viewModel.page)
     }
@@ -62,7 +62,7 @@ class MainViewModelTest : KoinTest {
         viewModel.resetLoadingPokemon()
         // then
         verifyBlocking(mockRepository) {
-            loadPokemonPage(viewModel.page, true)
+            loadAndCachePokemonPage(viewModel.page, true)
         }
         Assert.assertEquals(0 , viewModel.page)
     }
