@@ -33,14 +33,14 @@ class RepositoryTest : KoinTest {
         mockClient = mock()
         startKoin {
             modules(
-                    listOf(
-                            modulesDomain,
-                            modulesDataSource,
-                            module(override = true) {
-                                single(named(CLIENT_POKEMON_TAG)) { mockClient }
-                                single(named(DAO_POKEMON_TAG)) { mockDao }
-                            }
-                    )
+                listOf(
+                    modulesDomain,
+                    modulesDataSource,
+                    module {
+                        single(named(CLIENT_POKEMON_TAG)) { mockClient }
+                        single(named(DAO_POKEMON_TAG)) { mockDao }
+                    }
+                )
             )
         }
     }

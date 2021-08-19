@@ -7,7 +7,10 @@
         <item name="colorAccent">@color/colorPrimary</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@drawable/splash_background</item>
-<!--        <item name="android:windowActivityTransitions">true</item>-->
+
+        <item name="android:windowSplashScreenAnimationDuration" tools:targetApi="s">0</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/logo_splash</item>
+        <item name="android:windowSplashScreenIconBackgroundColor" tools:targetApi="s">@color/colorSecondaryDark</item>
     </style>
 
     <style name="Theme.Pokeapi.NoActionBar">
