@@ -1,26 +1,25 @@
 package com.palaspro.pokechallenge.presenter.features.detail.view.activity
 
 import android.os.Bundle
-import android.view.ContextMenu
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.palaspro.pokechallenge.R
-import com.palaspro.pokechallenge.presenter.base.BaseActivity
 import com.palaspro.pokechallenge.databinding.ActivityDetailBinding
 import com.palaspro.pokechallenge.domain.model.Constants
+import com.palaspro.pokechallenge.presenter.base.BaseActivity
+import com.palaspro.pokechallenge.presenter.features.detail.navigator.DetailNavigatorImpl
 import com.palaspro.pokechallenge.presenter.features.detail.view.adapter.ListStringAdapter
 import com.palaspro.pokechallenge.presenter.features.detail.viewmodel.DetailViewModel
 import kotlinx.coroutines.flow.collect
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class DetailActivity : BaseActivity() {
 
-    private val viewModelDetail: DetailViewModel by viewModel() {
+    private val viewModelDetail: DetailViewModel by viewModel {
         parametersOf(intent.getIntExtra(Constants.Extras.EXTRA_ID, -1))
     }
 
@@ -37,7 +36,7 @@ class DetailActivity : BaseActivity() {
 
         setupObservers()
 
-        viewModelDetail.onCreateActivity()
+        viewModelDetail.onCreateActivity(DetailNavigatorImpl(this))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =

@@ -18,43 +18,69 @@ import com.palaspro.pokechallenge.presenter.features.main.view.activity.MainActi
 import com.palaspro.pokechallenge.presenter.features.main.viewmodel.MainViewModel
 import me.sargunvohra.lib.pokekotlin.client.PokeApiClient
 import org.koin.android.ext.koin.androidContext
-import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 
 // presentation layer dependencies
-val modulesPresentation = module(override = true) {
-    scope<MainActivity> {
-        scoped<MainNavigator> { MainNavigatorImpl(get()) }
-        viewModel { MainViewModel(get(), get(named(REPOSITORY_POKEMON_TAG))) }
+val modulesPresentation = module {
+
+    viewModel {
+        MainViewModel(
+            repository = get(named(REPOSITORY_POKEMON_TAG))
+        )
     }
-    scope<DetailActivity> {
-        scoped<DetailNavigator> { DetailNavigatorImpl(get())}
-        viewModel { (idPokemon : Int) -> DetailViewModel(idPokemon ,get(), get(named(REPOSITORY_POKEMON_TAG))) }
+
+    viewModel { (idPokemon: Int) ->
+        DetailViewModel(
+            id = idPokemon,
+            repository = get(named(REPOSITORY_POKEMON_TAG))
+        )
     }
+
 }
 
 // domain layer dependencies
-val modulesDomain = module(override = true) {
+val modulesDomain = module {
 
-    factory<PokemonRepository>(named(REPOSITORY_POKEMON_TAG)) { PokemonRepositoryImpl(get(named(CLIENT_POKEMON_TAG)), get(named(CLIENT_USER_POKEMON_TAG)), get(named(DAO_POKEMON_TAG))) }
+    factory<PokemonRepository>(named(REPOSITORY_POKEMON_TAG)) {
+        PokemonRepositoryImpl(
+            get(
+                named(
+                    CLIENT_POKEMON_TAG
+                )
+            ), get(named(CLIENT_USER_POKEMON_TAG)), get(named(DAO_POKEMON_TAG))
+        )
+    }
 }
 
 // data source dependencies
-val modulesDataSource = module(override = true) {
+val modulesDataSource = module {
 
     single<PokemonClient>(named(CLIENT_POKEMON_TAG)) { PokemonClientImpl(PokeApiClient()) }
 
-    single<PokemonUserClient>(named(CLIENT_USER_POKEMON_TAG)) { PokemonUserClientImpl(get(named(RETROFIT_USER_POKEMON_TAG))) }
+    single<PokemonUserClient>(named(CLIENT_USER_POKEMON_TAG)) {
+        PokemonUserClientImpl(
+            get(
+                named(
+                    RETROFIT_USER_POKEMON_TAG
+                )
+            )
+        )
+    }
 
     single(named(DAO_POKEMON_TAG)) {
-        Room.databaseBuilder(androidContext(), PokemonDatabase::class.java, Constants.DataBase.BD_NAME).fallbackToDestructiveMigration().build().pokemonDao()
+        Room.databaseBuilder(
+            androidContext(),
+            PokemonDatabase::class.java,
+            Constants.DataBase.BD_NAME
+        ).fallbackToDestructiveMigration().build().pokemonDao()
     }
 
     single<Retrofit>(named(RETROFIT_USER_POKEMON_TAG)) {
         Retrofit.Builder()
-                .baseUrl(URL_BASE_USER_POKEMON)
-                .build()
+            .baseUrl(URL_BASE_USER_POKEMON)
+            .build()
     }
 }
