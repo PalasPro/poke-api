@@ -29,8 +29,8 @@ class DetailViewModelTest : KoinTest {
         startKoin {
             modules(
                 listOf(
-                    module(override = true) {
-                        factory { DetailViewModel(idPokemon, mockNavigator, mockRepository) }
+                    module {
+                        factory { DetailViewModel(idPokemon, mockRepository) }
                     }
                 )
             )
@@ -45,7 +45,7 @@ class DetailViewModelTest : KoinTest {
     @Test
     fun `check that on create activity call load more data`() {
         // when
-        viewModel.onCreateActivity()
+        viewModel.onCreateActivity(mockNavigator)
         // then
         verifyBlocking(mockRepository) {
             getPokemonDetail(idPokemon)

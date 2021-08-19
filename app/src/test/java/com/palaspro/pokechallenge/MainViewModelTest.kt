@@ -31,8 +31,8 @@ class MainViewModelTest : KoinTest {
         startKoin {
             modules(
                 listOf(
-                    module(override = true) {
-                        factory { MainViewModel(mockNavigator, mockRepository) }
+                    module {
+                        factory { MainViewModel(mockRepository) }
                     }
                 )
             )
@@ -47,16 +47,17 @@ class MainViewModelTest : KoinTest {
     @Test
     fun `check that on create activity call load more data`() {
         // when
-        viewModel.onCreateActivity()
+        viewModel.onCreateActivity(mockNavigator)
         // then
         verifyBlocking(mockRepository) {
             loadAndCachePokemonPage(viewModel.page)
         }
-        Assert.assertEquals(0 , viewModel.page)
+        Assert.assertEquals(0, viewModel.page)
     }
 
     @Test
     fun `check that reset pages put zero in page filed and request the first page`() {
+        viewModel.onCreateActivity(mockNavigator)
         viewModel.page = 23
         // when
         viewModel.resetLoadingPokemon()
@@ -64,12 +65,13 @@ class MainViewModelTest : KoinTest {
         verifyBlocking(mockRepository) {
             loadAndCachePokemonPage(viewModel.page, true)
         }
-        Assert.assertEquals(0 , viewModel.page)
+        Assert.assertEquals(0, viewModel.page)
     }
 
     @Test
     fun `check the navigation to go to detail`() {
         // when
+        viewModel.onCreateActivity(mockNavigator)
         viewModel.navigateToDetail(any())
         // then
         verify(mockNavigator).navigateToDetail(any())
