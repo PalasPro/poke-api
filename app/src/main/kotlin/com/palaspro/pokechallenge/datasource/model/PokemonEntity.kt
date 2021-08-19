@@ -2,7 +2,6 @@ package com.palaspro.pokechallenge.datasource.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import me.sargunvohra.lib.pokekotlin.model.PokemonAbility
 
 @Entity(tableName = "pokemon")
 class PokemonEntity(

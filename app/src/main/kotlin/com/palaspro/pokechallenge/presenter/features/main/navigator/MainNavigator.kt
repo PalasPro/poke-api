@@ -8,11 +8,11 @@ import com.palaspro.pokechallenge.presenter.base.BaseNavigator
 import com.palaspro.pokechallenge.presenter.features.detail.view.activity.DetailActivity
 import com.palaspro.pokechallenge.presenter.features.main.view.activity.MainActivity
 
-interface MainNavigator {
+interface MainNavigator : BaseNavigator {
     /**
      * Navigation to detail of a Pokemon
      */
-    fun navigateToDetail(id : Int, options : Bundle? = null)
+    fun navigateToDetail(id: Int, options: Bundle? = null)
 
     /**
      * Show errors, in this case, with toast
@@ -20,12 +20,12 @@ interface MainNavigator {
     fun showError(message: String)
 }
 
-class MainNavigatorImpl(private val activity: MainActivity) : MainNavigator, BaseNavigator() {
+class MainNavigatorImpl(private val activity: MainActivity) : MainNavigator {
 
     /**
      * Navigation to detail of a Pokemon
      */
-    override fun navigateToDetail(id : Int, options : Bundle?) {
+    override fun navigateToDetail(id: Int, options: Bundle?) {
         val intent = Intent(activity, DetailActivity::class.java)
         intent.putExtra(Constants.Extras.EXTRA_ID, id)
         activity.startActivity(intent)

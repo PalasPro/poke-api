@@ -12,9 +12,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-        private var navigator: MainNavigator,
-        private var repository: PokemonRepository
-) : BaseViewModel() {
+    private var repository: PokemonRepository
+) : BaseViewModel<MainNavigator>() {
 
     /**
      * Current page to request
@@ -28,10 +27,12 @@ class MainViewModel(
         it.toListItems(page > 0)
     }
 
+
     /**
      * This function is called in the creation of an activity
      */
-    override fun onCreateActivity() {
+    override fun onCreateActivity(navigator: MainNavigator) {
+        super.onCreateActivity(navigator)
         loadMorePokemon()
     }
 
@@ -46,12 +47,13 @@ class MainViewModel(
     /**
      * Request a page of pokemon
      */
-    fun loadMorePokemon(forceRefresh : Boolean = false) {
+    fun loadMorePokemon(forceRefresh: Boolean = false) {
         if (page == 0) {
             loadingMutable.value = true
         }
         viewModelScope.launch(Dispatchers.IO) {
-            repository.loadAndCachePokemonPage(page, forceRefresh).fold(::handleError, ::handleSuccess)
+            repository.loadAndCachePokemonPage(page, forceRefresh)
+                .fold(::handleError, ::handleSuccess)
         }
     }
 
@@ -63,7 +65,7 @@ class MainViewModel(
     }
 
     private fun handleSuccess(hasNext: Boolean) {
-        if(hasNext) {
+        if (hasNext) {
             page++
         } else {
             page = -1
