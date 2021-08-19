@@ -4,10 +4,14 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-abstract class BaseViewModel : ViewModel() {
+open class BaseViewModel<T : BaseNavigator> : ViewModel() {
 
     protected val loadingMutable: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val loading: StateFlow<Boolean> = loadingMutable
 
-    abstract fun onCreateActivity()
+    lateinit var navigator : T
+
+    open fun onCreateActivity(navigator: T) {
+        this.navigator = navigator
+    }
 }

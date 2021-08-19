@@ -12,9 +12,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class DetailViewModel(
-        private val id: Int,
-        private val navigator: DetailNavigator,
-        private var repository: PokemonRepository) : BaseViewModel() {
+    private val id: Int,
+    private var repository: PokemonRepository
+) : BaseViewModel<DetailNavigator>() {
 
     /**
      * Listening the data source changes
@@ -26,7 +26,8 @@ class DetailViewModel(
     /**
      * This function is called in the creation of an activity
      */
-    override fun onCreateActivity() {
+    override fun onCreateActivity(navigator: DetailNavigator) {
+        super.onCreateActivity(navigator)
         loadPokemonDetail()
     }
 

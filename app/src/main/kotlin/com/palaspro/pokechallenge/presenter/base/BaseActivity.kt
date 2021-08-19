@@ -1,5 +1,5 @@
 package com.palaspro.pokechallenge.presenter.base
 
-import org.koin.android.scope.ScopeActivity
+import androidx.appcompat.app.AppCompatActivity
 
-abstract class BaseActivity : ScopeActivity() 
+abstract class BaseActivity : AppCompatActivity()

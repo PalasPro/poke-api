@@ -1,30 +1,43 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-    buildscript {
-        ext.kotlin_version = "1.4.21"
-        ext.koin_version = "2.2.2"
-        ext.arrow_version = "0.11.0"
+buildscript {
+    ext.kotlin_version = "1.5.21"
+    ext.kotlin_coroutines_version = "1.5.1"
+    ext.app_compat_version = "1.3.1"
+    ext.constrains_layout_version = "2.1.0"
+    ext.recycler_version = "1.2.1"
+    ext.swipe_regresh_version = "1.1.0"
+    ext.material_version = "1.4.0"
+    ext.coil_version = "1.3.2"
+    ext.koin_version = "3.1.2"
+    ext.arrow_version = "0.11.0"
+    ext.livecycle_version = "2.3.1"
+    ext.livecycle_extension_version = "2.2.0"
+    ext.room_version = "2.3.0"
+    ext.retrofit_version = "2.9.0"
+    ext.mockito_kotlin_version = "2.2.0"
+    ext.junit_version = "4.13.1"
+    ext.android_ext_junit_version = "1.1.3"
+    ext.espresso_version = "3.4.0"
+    ext.runner_version = "1.4.0"
+    ext.runner_version = "1.4.0"
 
-        repositories {
-            google()
-            jcenter()
-        }
-        dependencies {
-            classpath 'com.android.tools.build:gradle:4.1.2'
-            classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
-            // NOTE: Do not place your application dependencies here; they belong
-            // in the individual module build.gradle files
-        }
+    repositories {
+        google()
+        mavenCentral()
     }
-
-    allprojects {
-        repositories {
-            google()
-            jcenter()
-            maven { url 'https://dl.bintray.com/sargunv/maven' }
-        }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.0.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
+}
 
-    task clean (type: Delete) {
-        delete rootProject.buildDir
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
     }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
